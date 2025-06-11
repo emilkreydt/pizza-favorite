@@ -1,34 +1,43 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Form, Input, Radio, Button, Typography, message } from 'antd';
-import '@ant-design/v5-patch-for-react-19';
+import { useState } from "react";
+import { Form, Input, Radio, Button, Typography, message } from "antd";
+import "@ant-design/v5-patch-for-react-19";
 
 const { Title } = Typography;
+
+interface PizzaFormValues {
+  email: string;
+  geboorteDatum: string;
+  smaak: string;
+  kaas: string;
+  vlees: string;
+  groente: string;
+}
 
 export default function PizzaQuizForm() {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
-  const handleFinish = async (values: any) => {
+  const handleFinish = async (values: PizzaFormValues) => {
     setLoading(true);
     try {
-      const res = await fetch('/api/pizza/send', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("/api/pizza/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(values),
       });
 
       if (res.ok) {
-        message.success('Je pizza-resultaat is verzonden naar je e-mail!');
+        message.success("Je pizza-resultaat is verzonden naar je e-mail!");
         setSubmitted(true);
         form.resetFields();
       } else {
-        message.error('Er is iets misgegaan met verzenden.');
+        message.error("Er is iets misgegaan met verzenden.");
       }
     } catch (err) {
-      message.error('Fout bij verzenden van formulier.');
+      message.error("Fout bij verzenden van formulier. " + err);
     } finally {
       setLoading(false);
     }
@@ -48,7 +57,7 @@ export default function PizzaQuizForm() {
           <Form.Item
             label="E-mailadres"
             name="email"
-            rules={[{ required: true, message: 'Voer je e-mailadres in' }]}
+            rules={[{ required: true, message: "Voer je e-mailadres in" }]}
           >
             <Input type="email" />
           </Form.Item>
@@ -56,7 +65,7 @@ export default function PizzaQuizForm() {
           <Form.Item
             label="Geboortedatum"
             name="geboorteDatum"
-            rules={[{ required: true, message: 'Voer je geboortedatum in' }]}
+            rules={[{ required: true, message: "Voer je geboortedatum in" }]}
           >
             <Input type="date" />
           </Form.Item>
@@ -64,7 +73,7 @@ export default function PizzaQuizForm() {
           <Form.Item
             label="Welke smaak spreekt je het meeste aan?"
             name="smaak"
-            rules={[{ required: true, message: 'Kies een optie' }]}
+            rules={[{ required: true, message: "Kies een optie" }]}
           >
             <Radio.Group>
               <Radio value="Zout">Zout</Radio>
@@ -78,7 +87,7 @@ export default function PizzaQuizForm() {
           <Form.Item
             label="Hoeveel kaas wil je?"
             name="kaas"
-            rules={[{ required: true, message: 'Kies een optie' }]}
+            rules={[{ required: true, message: "Kies een optie" }]}
           >
             <Radio.Group>
               <Radio value="Heel veel">Heel veel</Radio>
@@ -90,7 +99,7 @@ export default function PizzaQuizForm() {
           <Form.Item
             label="Wil je vlees op je pizza?"
             name="vlees"
-            rules={[{ required: true, message: 'Kies een optie' }]}
+            rules={[{ required: true, message: "Kies een optie" }]}
           >
             <Radio.Group>
               <Radio value="Ja, kip">Ja, kip</Radio>
@@ -103,7 +112,7 @@ export default function PizzaQuizForm() {
           <Form.Item
             label="Welke groente vind je lekker?"
             name="groente"
-            rules={[{ required: true, message: 'Kies een optie' }]}
+            rules={[{ required: true, message: "Kies een optie" }]}
           >
             <Radio.Group>
               <Radio value="Ananas">Ananas</Radio>

@@ -5,14 +5,19 @@ import { PizzaPDF } from "@/app/lib/pdf/PizzaPDF";
 
 export async function POST(req: Request) {
   const data = await req.json();
-  const { email, smaak, kaas, vlees, groente } = data;
+  const { email, kaas, vlees, groente } = data;
+
+  const baseUrl =
+    process.env.NODE_ENV === "development"
+      ? "http://localhost:3000"
+      : process.env.BASE_URL;
 
   const imageMap: Record<string, string> = {
-    "Pizza Margherita": `${process.env.BASE_URL}/margherita.jpg`,
-    "Pizza Pepperoni": `${process.env.BASE_URL}/pepperoni.jpg`,
-    "Pizza Hawaii": `${process.env.BASE_URL}/hawaii.jpg`,
-    "Pizza Barbecue Chicken": `${process.env.BASE_URL}/barbecue_chicken.jpg`,
-    "Pizza Vegetariana": `${process.env.BASE_URL}/vegetariana.jpg`,
+    "Pizza Margherita": `${baseUrl}/margherita.jpg`,
+    "Pizza Pepperoni": `${baseUrl}/pepperoni.jpg`,
+    "Pizza Hawaii": `${baseUrl}/hawaii.jpg`,
+    "Pizza Barbecue Chicken": `${baseUrl}/barbecue_chicken.jpg`,
+    "Pizza Vegetariana": `${baseUrl}/vegetariana.jpg`,
   };
 
   console.log("SMTP debug:", process.env.SMTP_USER, process.env.SMTP_PASS);
