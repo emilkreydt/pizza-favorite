@@ -7,6 +7,14 @@ export async function POST(req: Request) {
   const data = await req.json();
   const { email, smaak, kaas, vlees, groente } = data;
 
+  const imageMap: Record<string, string> = {
+    "Pizza Margherita": `${process.env.BASE_URL}/margherita.jpg`,
+    "Pizza Pepperoni": `${process.env.BASE_URL}/pepperoni.jpg`,
+    "Pizza Hawaii": `${process.env.BASE_URL}/hawaii.jpg`,
+    "Pizza Barbecue Chicken": `${process.env.BASE_URL}/barbecue_chicken.jpg`,
+    "Pizza Vegetariana": `${process.env.BASE_URL}/vegetariana.jpg`,
+  };
+
   console.log("SMTP debug:", process.env.SMTP_USER, process.env.SMTP_PASS);
 
   let pizza = "Pizza Margherita";
@@ -33,14 +41,14 @@ export async function POST(req: Request) {
     <PizzaPDF
       pizzaName={pizza}
       description={descriptionMap[pizza]}
-      imageUrl={`${process.env.BASE_URL}/pizza.jpg`}
+      imageUrl={imageMap[pizza]}
     />
   );
 
   const message = `
 Hallo!
 
-Gebaseerd op je antwoorden, is jouw ideale pizza: ${pizza} 🍕
+Gebaseerd op je antwoorden, is jouw ideale pizza: ${pizza} 
 
 Zie de bijlage voor meer info. Eet smakelijk!
   `;
