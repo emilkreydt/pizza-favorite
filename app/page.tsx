@@ -25,10 +25,19 @@ export default function PizzaQuizForm() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setInitialLoading(false);
-    }, 1200); 
+    }, 1000); // Initial load simulation
 
     return () => clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    if (submitted) {
+      const resetTimer = setTimeout(() => {
+        setSubmitted(false);
+      }, 3000); // Show success screen for 3 seconds
+      return () => clearTimeout(resetTimer);
+    }
+  }, [submitted]);
 
   const handleFinish = async (values: PizzaFormValues) => {
     setLoading(true);
@@ -57,10 +66,7 @@ export default function PizzaQuizForm() {
     <div className="max-w-xl mx-auto p-6">
       {initialLoading ? (
         <div className="text-center py-32">
-          <Spin
-            indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />}
-            size="large"
-          />
+          <Spin indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />
           <p style={{ marginTop: 16 }}>Pizza quiz wordt geladen...</p>
         </div>
       ) : (
@@ -69,10 +75,7 @@ export default function PizzaQuizForm() {
 
           {loading ? (
             <div className="text-center py-12">
-              <Spin
-                indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />}
-                size="large"
-              />
+              <Spin indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />
               <p style={{ marginTop: 16 }}>Verwerken van je pizza-resultaat...</p>
             </div>
           ) : submitted ? (
