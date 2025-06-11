@@ -1,103 +1,125 @@
-import Image from "next/image";
+'use client';
 
-export default function Home() {
+import { useState } from 'react';
+import { Form, Input, Radio, Button, Typography, message } from 'antd';
+
+const { Title } = Typography;
+
+export default function PizzaQuizForm() {
+  const [form] = Form.useForm();
+  const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleFinish = async (values: any) => {
+    setLoading(true);
+    try {
+      const res = await fetch('/api/pizza-verstuur', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(values),
+      });
+
+      if (res.ok) {
+        message.success('Je pizza-resultaat is verzonden naar je e-mail!');
+        setSubmitted(true);
+        form.resetFields();
+      } else {
+        message.error('Er is iets misgegaan met verzenden.');
+      }
+    } catch (err) {
+      message.error('Fout bij verzenden van formulier.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="max-w-xl mx-auto p-6">
+      <Title level={2}>Wat voor pizza ben jij?</Title>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+      {!submitted && (
+        <Form
+          form={form}
+          layout="vertical"
+          onFinish={handleFinish}
+          initialValues={{}}
+        >
+          <Form.Item
+            label="E-mailadres"
+            name="email"
+            rules={[{ required: true, message: 'Voer je e-mailadres in' }]}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            <Input type="email" />
+          </Form.Item>
+
+          <Form.Item
+            label="Geboortedatum"
+            name="geboorteDatum"
+            rules={[{ required: true, message: 'Voer je geboortedatum in' }]}
           >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+            <Input type="date" />
+          </Form.Item>
+
+          <Form.Item
+            label="Welke smaak spreekt je het meeste aan?"
+            name="smaak"
+            rules={[{ required: true, message: 'Kies een optie' }]}
+          >
+            <Radio.Group>
+              <Radio value="Zout">Zout</Radio>
+              <Radio value="Zoet">Zoet</Radio>
+              <Radio value="Rokerig">Rokerig</Radio>
+              <Radio value="Pittig">Pittig</Radio>
+              <Radio value="Fris">Fris</Radio>
+            </Radio.Group>
+          </Form.Item>
+
+          <Form.Item
+            label="Hoeveel kaas wil je?"
+            name="kaas"
+            rules={[{ required: true, message: 'Kies een optie' }]}
+          >
+            <Radio.Group>
+              <Radio value="Heel veel">Heel veel</Radio>
+              <Radio value="Normaal">Normaal</Radio>
+              <Radio value="Weinig">Weinig</Radio>
+            </Radio.Group>
+          </Form.Item>
+
+          <Form.Item
+            label="Wil je vlees op je pizza?"
+            name="vlees"
+            rules={[{ required: true, message: 'Kies een optie' }]}
+          >
+            <Radio.Group>
+              <Radio value="Ja, kip">Ja, kip</Radio>
+              <Radio value="Ja, pepperoni">Ja, pepperoni</Radio>
+              <Radio value="Alleen spek">Alleen spek</Radio>
+              <Radio value="Nee">Nee</Radio>
+            </Radio.Group>
+          </Form.Item>
+
+          <Form.Item
+            label="Welke groente vind je lekker?"
+            name="groente"
+            rules={[{ required: true, message: 'Kies een optie' }]}
+          >
+            <Radio.Group>
+              <Radio value="Ananas">Ananas</Radio>
+              <Radio value="Paprika">Paprika</Radio>
+              <Radio value="Tomaat">Tomaat</Radio>
+              <Radio value="Ui">Ui</Radio>
+              <Radio value="Geen">Geen</Radio>
+            </Radio.Group>
+          </Form.Item>
+
+          <Form.Item>
+            <Button type="primary" htmlType="submit" loading={loading}>
+              Verstuur
+            </Button>
+          </Form.Item>
+        </Form>
+      )}
     </div>
   );
 }
