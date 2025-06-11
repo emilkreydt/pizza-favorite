@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Form, Input, Radio, Button, Typography, message } from 'antd';
+import '@ant-design/v5-patch-for-react-19';
 
 const { Title } = Typography;
 
@@ -13,7 +14,7 @@ export default function PizzaQuizForm() {
   const handleFinish = async (values: any) => {
     setLoading(true);
     try {
-      const res = await fetch('/api/pizza-verstuur', {
+      const res = await fetch('/api/pizza/send', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(values),
