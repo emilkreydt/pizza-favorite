@@ -17,15 +17,24 @@ export async function POST(req: Request) {
     pizza = "Pizza Vegetariana";
 
   const descriptionMap: Record<string, string> = {
-    "Pizza Margherita": "Een klassieke pizza met tomaat, mozzarella en basilicum. Eenvoudig, vers en heerlijk.",
-    "Pizza Pepperoni": "Een pittige favoriet met gesmolten kaas en royale plakjes pepperoni.",
-    "Pizza Hawaii": "Een tropische mix van ananas en ham – zoet en hartig in balans.",
-    "Pizza Barbecue Chicken": "Rijke barbecuesaus, sappige kip en een rokerige twist.",
-    "Pizza Vegetariana": "Volop verse groenten zoals paprika, ui, champignons en olijven.",
+    "Pizza Margherita":
+      "Een klassieke pizza met tomaat, mozzarella en basilicum. Eenvoudig, vers en heerlijk.",
+    "Pizza Pepperoni":
+      "Een pittige favoriet met gesmolten kaas en royale plakjes pepperoni.",
+    "Pizza Hawaii":
+      "Een tropische mix van ananas en ham – zoet en hartig in balans.",
+    "Pizza Barbecue Chicken":
+      "Rijke barbecuesaus, sappige kip en een rokerige twist.",
+    "Pizza Vegetariana":
+      "Volop verse groenten zoals paprika, ui, champignons en olijven.",
   };
 
   const pdfBuffer = await renderToBuffer(
-    <PizzaPDF pizzaName={pizza} description={descriptionMap[pizza]} />
+    <PizzaPDF
+      pizzaName={pizza}
+      description={descriptionMap[pizza]}
+      imageUrl={`${process.env.BASE_URL}/pizza.jpg`}
+    />
   );
 
   const message = `
