@@ -1,9 +1,18 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { Form, Input, Radio, Button, Typography, message, Spin, Result } from 'antd';
-import { LoadingOutlined, CheckCircleTwoTone } from '@ant-design/icons';
-import '@ant-design/v5-patch-for-react-19';
+import { useEffect, useState } from "react";
+import {
+  Form,
+  Input,
+  Radio,
+  Button,
+  Typography,
+  message,
+  Spin,
+  Result,
+} from "antd";
+import { LoadingOutlined, CheckCircleTwoTone } from "@ant-design/icons";
+import "@ant-design/v5-patch-for-react-19";
 
 const { Title } = Typography;
 
@@ -16,47 +25,73 @@ interface PizzaFormValues {
   groente: string;
 }
 
+/**
+ * Form values for the pizza quiz.
+ * @typedef {Object} PizzaFormValues
+ * @property {string} email - User's email address.
+ * @property {string} geboorteDatum - User's date of birth.
+ * @property {string} smaak - Preferred flavor.
+ * @property {string} kaas - Cheese preference.
+ * @property {string} vlees - Meat preference.
+ * @property {string} groente - Vegetable preference.
+ */
+
+/**
+ * Renders the interactive Pizza Quiz form.
+ * Handles submission, validation, success messaging, and conditional states.
+ * @returns {JSX.Element} The rendered form component.
+ */
 export default function PizzaQuizForm() {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
 
+  /**
+   * Simulates initial loading state on component mount.
+   */
   useEffect(() => {
     const timer = setTimeout(() => {
       setInitialLoading(false);
-    }, 1000); // Initial load simulation
-
+    }, 1000);
     return () => clearTimeout(timer);
   }, []);
 
+  /**
+   * Automatically resets the success message after submission.
+   */
   useEffect(() => {
     if (submitted) {
       const resetTimer = setTimeout(() => {
         setSubmitted(false);
-      }, 3000); // Show success screen for 3 seconds
+      }, 3000);
       return () => clearTimeout(resetTimer);
     }
   }, [submitted]);
 
+  /**
+   * Handles form submission and sends pizza preferences to the API.
+   * @param {PizzaFormValues} values - The form values submitted by the user.
+   * @returns {Promise<void>}
+   */
   const handleFinish = async (values: PizzaFormValues) => {
     setLoading(true);
     try {
-      const res = await fetch('/api/pizza/send', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("/api/pizza/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(values),
       });
 
       if (res.ok) {
-        message.success('Je pizza-resultaat is verzonden naar je e-mail!');
+        message.success("Je pizza-resultaat is verzonden naar je e-mail!");
         setSubmitted(true);
         form.resetFields();
       } else {
-        message.error('Er is iets misgegaan met verzenden.');
+        message.error("Er is iets misgegaan met verzenden.");
       }
     } catch (err) {
-      message.error('Fout bij verzenden van formulier. ' + err);
+      message.error("Fout bij verzenden van formulier. " + err);
     } finally {
       setLoading(false);
     }
@@ -75,8 +110,12 @@ export default function PizzaQuizForm() {
 
           {loading ? (
             <div className="text-center py-12">
-              <Spin indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />
-              <p style={{ marginTop: 16 }}>Verwerken van je pizza-resultaat...</p>
+              <Spin
+                indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />}
+              />
+              <p style={{ marginTop: 16 }}>
+                Verwerken van je pizza-resultaat...
+              </p>
             </div>
           ) : submitted ? (
             <Result
@@ -94,7 +133,7 @@ export default function PizzaQuizForm() {
               <Form.Item
                 label="E-mailadres"
                 name="email"
-                rules={[{ required: true, message: 'Voer je e-mailadres in' }]}
+                rules={[{ required: true, message: "Voer je e-mailadres in" }]}
               >
                 <Input type="email" />
               </Form.Item>
@@ -102,7 +141,9 @@ export default function PizzaQuizForm() {
               <Form.Item
                 label="Geboortedatum"
                 name="geboorteDatum"
-                rules={[{ required: true, message: 'Voer je geboortedatum in' }]}
+                rules={[
+                  { required: true, message: "Voer je geboortedatum in" },
+                ]}
               >
                 <Input type="date" />
               </Form.Item>
@@ -110,7 +151,7 @@ export default function PizzaQuizForm() {
               <Form.Item
                 label="Welke smaak spreekt je het meeste aan?"
                 name="smaak"
-                rules={[{ required: true, message: 'Kies een optie' }]}
+                rules={[{ required: true, message: "Kies een optie" }]}
               >
                 <Radio.Group>
                   <Radio value="Zout">Zout</Radio>
@@ -124,7 +165,7 @@ export default function PizzaQuizForm() {
               <Form.Item
                 label="Hoeveel kaas wil je?"
                 name="kaas"
-                rules={[{ required: true, message: 'Kies een optie' }]}
+                rules={[{ required: true, message: "Kies een optie" }]}
               >
                 <Radio.Group>
                   <Radio value="Heel veel">Heel veel</Radio>
@@ -136,7 +177,7 @@ export default function PizzaQuizForm() {
               <Form.Item
                 label="Wil je vlees op je pizza?"
                 name="vlees"
-                rules={[{ required: true, message: 'Kies een optie' }]}
+                rules={[{ required: true, message: "Kies een optie" }]}
               >
                 <Radio.Group>
                   <Radio value="Ja, kip">Ja, kip</Radio>
@@ -149,7 +190,7 @@ export default function PizzaQuizForm() {
               <Form.Item
                 label="Welke groente vind je lekker?"
                 name="groente"
-                rules={[{ required: true, message: 'Kies een optie' }]}
+                rules={[{ required: true, message: "Kies een optie" }]}
               >
                 <Radio.Group>
                   <Radio value="Ananas">Ananas</Radio>

@@ -55,6 +55,10 @@ interface PizzaPDFProps {
   imageUrl: string;
 }
 
+/**
+ * Generates a styled PDF document presenting the user's ideal pizza based on quiz results.
+ */
+
 export const PizzaPDF = ({ pizzaName, description, imageUrl }: PizzaPDFProps) => (
   <Document>
     <Page size="A4" style={styles.page}>
