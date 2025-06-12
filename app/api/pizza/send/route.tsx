@@ -7,17 +7,12 @@ export async function POST(req: Request) {
   const data = await req.json();
   const { email, kaas, vlees, groente } = data;
 
-  const baseUrl =
-    process.env.NODE_ENV === "development"
-      ? "http://localhost:3000"
-      : process.env.BASE_URL;
-
   const imageMap: Record<string, string> = {
-    "Pizza Margherita": `${baseUrl}/margherita.jpg`,
-    "Pizza Pepperoni": `${baseUrl}/pepperoni.jpg`,
-    "Pizza Hawaii": `${baseUrl}/hawaii.jpg`,
-    "Pizza Barbecue Chicken": `${baseUrl}/barbecue_chicken.jpg`,
-    "Pizza Vegetariana": `${baseUrl}/vegetariana.jpg`,
+    "Pizza Margherita": "https://res.cloudinary.com/dwbpcbxjk/image/upload/v1749651370/avatars/sttf95uyi12gxofxklq3.jpg",
+    "Pizza Pepperoni": "https://res.cloudinary.com/dwbpcbxjk/image/upload/v1749652206/avatars/sdm9b9v3ut0nzqfh5qp0.jpg",
+    "Pizza Hawaii": "https://res.cloudinary.com/dwbpcbxjk/image/upload/v1749650530/avatars/ymphdbi8s7wrvsafi3hu.jpg",
+    "Pizza Barbecue Chicken": "https://res.cloudinary.com/dwbpcbxjk/image/upload/v1749650227/avatars/dwv7goadobz8rno5oebu.jpg",
+    "Pizza Vegetariana": "https://res.cloudinary.com/dwbpcbxjk/image/upload/v1749654299/avatars/mh4udiwjdte0zpsghdah.jpg",
   };
 
   console.log("SMTP debug:", process.env.SMTP_USER, process.env.SMTP_PASS);
